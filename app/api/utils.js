@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export async function authenticateToken(request) {
   try {
     const token = request.headers.get("authorization");
-    console.log(token);
+
     if (!token) {
       return { error: "No token provided", status: 401 };
     }
