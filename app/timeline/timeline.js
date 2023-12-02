@@ -20,7 +20,7 @@ const itemStyle = {
 	flexDirection: 'column',
 	justifyContent: 'center', // Center content vertically inside the item
 	alignItems: 'center', // Center content horizontally inside the item
-	border: '1px solid #ccc', // B
+	border: '1px solid #ccc', // Border
 	// Add other styles like background, boxShadow, borderRadius, etc.
 };
 
@@ -58,7 +58,7 @@ const Timeline = () => {
 	const [events, setEvents] = useState(timelineEvents);
   
 	const handleAddEvent = () => {
-	  // Logic for add button
+	  // Logic for add button?
 	};
 
 	return (
