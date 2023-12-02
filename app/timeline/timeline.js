@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const timelineStyle = {
 	display: 'flex',
@@ -44,34 +44,57 @@ const timelineEvents = [
 	{ id: 1, title: 'Event 1', date: '2023-01-01' },
 	{ id: 2, title: 'Event 2', date: '2023-01-02' },
 	{ id: 3, title: 'Event 3', date: '2023-01-03' },
-	{ id: 4, title: 'Event 4', date: '2023-01-04' },
-	{ id: 5, title: 'Event 5', date: '2023-01-05' },
-	{ id: 6, title: 'Event 6', date: '2023-01-06' },
-	{ id: 7, title: 'Event 7', date: '2023-01-07' },
-	{ id: 8, title: 'Event 8', date: '2023-01-08' },
-	{ id: 9, title: 'Event 9', date: '2023-01-09' },
+	// { id: 4, title: 'Event 4', date: '2023-01-04' },
+	// { id: 5, title: 'Event 5', date: '2023-01-05' },
+	// { id: 6, title: 'Event 6', date: '2023-01-06' },
+	// { id: 7, title: 'Event 7', date: '2023-01-07' },
+	// { id: 8, title: 'Event 8', date: '2023-01-08' },
+	// { id: 9, title: 'Event 9', date: '2023-01-09' },
 	// ... more events
 ];
 
 
 const Timeline = () => {
-	const [events, setEvents] = useState(timelineEvents);
-  
-	const handleAddEvent = () => {
-	  // Logic for add button?
-	};
+    const [events, setEvents] = useState(timelineEvents);
+    const [newEventId, setNewEventId] = useState(timelineEvents.length + 1);
+    const eventRefs = useRef({});
 
-	return (
-	  <div style={timelineStyle}>
-		{events.map(event => (
-		  <div key={event.id} style={itemStyle}>
-			<h3>{event.title}</h3>
-			<p>{event.date}</p>
-		  </div>
-		))}
-		<div style={addButtonStyle} onClick={handleAddEvent}>+</div>
-	  </div>
-	);
-  };
-  
-  export default Timeline;
+    const handleAddEvent = () => {
+        const newEvent = {
+            id: newEventId,
+            title: `Event ${newEventId}`,
+            date: '2023-01-10',
+        };
+
+        setEvents([...events, newEvent]);
+        setNewEventId(newEventId + 1);
+
+        // Wait for the state to update and the DOM to render
+        setTimeout(() => {
+            if (eventRefs.current[newEventId]) {
+                eventRefs.current[newEventId].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 0);
+    };
+
+    const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
+
+	
+    return (
+      <div style={{ ...timelineStyle, width: timelineWidth }}>
+        {events.map(event => (
+          <div
+            key={event.id}
+            ref={el => eventRefs.current[event.id] = el}
+            style={itemStyle}
+          >
+            <h3>{event.title}</h3>
+            <p>{event.date}</p>
+          </div>
+        ))}
+        <div style={addButtonStyle} onClick={handleAddEvent}>+</div>
+      </div>
+    );
+};
+
+export default Timeline;
