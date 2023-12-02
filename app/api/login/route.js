@@ -35,11 +35,19 @@ export async function POST(request) {
       expiresIn: "24h",
     });
 
-    // Return the JWT token
-    return NextResponse.json(
-      { message: "Login successful", token },
+    const response = NextResponse.json(
+      { message: "Login successful" },
       { status: 200 }
     );
+
+    // Set the HttpOnly, Secure, and SameSite cookie attributes
+    response.headers.set(
+      "Set-Cookie",
+      `authToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`
+    );
+
+    // Return the response with the cookie
+    return response;
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error }, { status: 500 });
