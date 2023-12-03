@@ -25,7 +25,7 @@ export async function POST(request) {
       // Insert the new entry into the Content table
       const contentInsert = await sql`
         INSERT INTO Content (username, contenttype, title, tags)
-        VALUES (${decoded.username}, 'Entry', ${title}, ${tags})
+        VALUES (${decoded.username}, 'Image', ${title}, ${tags})
         RETURNING contentid;
     `;
 
@@ -37,11 +37,13 @@ export async function POST(request) {
     `;
     } catch (error) {
       await sql`ROLLBACK`;
+      console.log(error);
       return NextResponse.json({ error }, { status: 500 });
     }
 
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error }, { status: 500 });
   }
 }

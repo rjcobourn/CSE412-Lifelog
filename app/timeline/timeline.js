@@ -1,32 +1,32 @@
-import React, { useState, useRef } from 'react'
-import { FiFileText, FiImage } from 'react-icons/fi'
+import React, { useState, useRef } from "react";
+import { FiFileText, FiImage } from "react-icons/fi";
 
 const timelineEvents = [
-  { id: 1, title: 'Event 1', text: '', image: null },
-  { id: 2, title: 'Event 2', text: '', image: null },
-  { id: 3, title: 'Event 3', text: '', image: null },
+  { id: 1, title: "Event 1", text: "", image: null },
+  { id: 2, title: "Event 2", text: "", image: null },
+  { id: 3, title: "Event 3", text: "", image: null },
   // ... more events
-]
+];
 
 const Timeline = () => {
-  const [events, setEvents] = useState(timelineEvents)
-  const [newEventId, setNewEventId] = useState(timelineEvents.length + 1)
-  const eventRefs = useRef({})
+  const [events, setEvents] = useState(timelineEvents);
+  const [newEventId, setNewEventId] = useState(timelineEvents.length + 1);
+  const eventRefs = useRef({});
 
-  const [showTextForm, setShowTextForm] = useState(false)
-  const [showImageForm, setShowImageForm] = useState(false)
+  const [showTextForm, setShowTextForm] = useState(false);
+  const [showImageForm, setShowImageForm] = useState(false);
 
-  const [newEventTitle, setNewEventTitle] = useState('')
-  const [newEventText, setNewEventText] = useState('')
-  const [newEventImage, setNewEventImage] = useState(null)
-  const [newEventTags, setNewEventTags] = useState('')
+  const [newEventTitle, setNewEventTitle] = useState("");
+  const [newEventText, setNewEventText] = useState("");
+  const [newEventImage, setNewEventImage] = useState(null);
+  const [newEventTags, setNewEventTags] = useState("");
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
-      setNewEventImage(file)
+      setNewEventImage(file);
     }
-  }
+  };
 
   const handleAddEvent = (title, text, image) => {
     const newEvent = {
@@ -34,80 +34,87 @@ const Timeline = () => {
       title,
       text,
       image: image ? URL.createObjectURL(image) : null,
-    }
+    };
 
-    setEvents([...events, newEvent])
-    setNewEventId(newEventId + 1)
+    setEvents([...events, newEvent]);
+    setNewEventId(newEventId + 1);
 
     setTimeout(() => {
       if (eventRefs.current[newEventId]) {
         eventRefs.current[newEventId].scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        })
+          behavior: "smooth",
+          block: "center",
+        });
       }
-    }, 0)
+    }, 0);
 
-    resetForm()
-  }
+    resetForm();
+  };
 
   const resetForm = () => {
-    setNewEventTitle('')
-    setNewEventText('')
-    setNewEventImage(null)
-    setNewEventTags('')
-    setShowTextForm(false)
-    setShowImageForm(false)
-  }
+    setNewEventTitle("");
+    setNewEventText("");
+    setNewEventImage(null);
+    setNewEventTags("");
+    setShowTextForm(false);
+    setShowImageForm(false);
+  };
 
-  const handleSubmit = async () => {
-    const formData = new FormData()
-    formData.append('title', newEventTitle)
-    formData.append('text', newEventText)
-    formData.append('tags', newEventTags)
-    if (newEventImage) {
-      formData.append('image', newEventImage)
-    }
-
+  const handleSubmit = async (showTextForm) => {
+    //TODO: add validation / make tags work
     try {
-      const response = await fetch('/api/route', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const data = await response.json()
-      if (data.message === 'Success') {
-        handleAddEvent(newEventTitle, newEventText, newEventImage)
-        setNewEventTitle('')
-        setNewEventText('')
-        setNewEventImage(null)
-        setNewEventTags('')
-        setShowForm(false)
+      if (showTextForm) {
+        await fetch("/api/add-text-entry", {
+          method: "POST",
+          body: JSON.stringify({
+            title: newEventTitle,
+            text: newEventText,
+            tags: "{}",
+          }),
+        });
       } else {
-        console.error(data.error)
+        // convert image to base64 string
+        const reader = new FileReader();
+        reader.readAsDataURL(newEventImage);
+        let base64String;
+        let mimeType;
+        await new Promise((resolve) => {
+          reader.onload = () => {
+            base64String = reader.result;
+            mimeType = reader.result.split(";")[0].split(":")[1];
+            resolve();
+          };
+        });
+
+        await fetch("/api/add-image-entry", {
+          method: "POST",
+          body: JSON.stringify({
+            title: newEventTitle,
+            imagetype: mimeType,
+            imagedata: base64String,
+            tags: "{}",
+          }),
+        });
       }
+
+      handleAddEvent(newEventTitle, newEventText, newEventImage);
     } catch (error) {
-      console.error('An error occurred:', error)
-	}
-	
-    if (showTextForm) {
-      handleAddEvent(newEventTitle, newEventText, null)
-    } else if (showImageForm) {
-      handleAddEvent(newEventTitle, newEventText, newEventImage)
+      console.error("Error during submission:", error);
+      // TODO: show error message
     }
 
-    resetForm()
-  }
+    resetForm();
+  };
 
-  const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`
+  const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
 
   return (
-    <div className='timeline' style={{ width: timelineWidth }}>
+    <div className="timeline" style={{ width: timelineWidth }}>
       {events.map((event) => (
         <div
           key={event.id}
           ref={(el) => (eventRefs.current[event.id] = el)}
-          className='timeline-item'
+          className="timeline-item"
         >
           <h3>{event.title}</h3>
           {event.text && <p>{event.text}</p>}
@@ -115,48 +122,51 @@ const Timeline = () => {
             <img
               src={event.image}
               alt={event.title}
-              style={{ width: '100%', height: 'auto' }}
+              style={{ width: "100%", height: "auto" }}
             />
           )}
         </div>
       ))}
-      <div className='add-button' onClick={() => setShowTextForm(true)}>
-        <FiFileText size={30} style={{ cursor: 'pointer' }} />
+      <div className="add-button" onClick={() => setShowTextForm(true)}>
+        <FiFileText size={30} style={{ cursor: "pointer" }} />
       </div>
-      <div className='add-button' onClick={() => setShowImageForm(true)}>
-        <FiImage size={30} style={{ cursor: 'pointer' }} />
+      <div className="add-button" onClick={() => setShowImageForm(true)}>
+        <FiImage size={30} style={{ cursor: "pointer" }} />
       </div>
 
       {(showTextForm || showImageForm) && (
-        <div className='modal-backdrop'>
-          <div className='modal'>
+        <div className="modal-backdrop">
+          <div className="modal">
             <input
-              type='text'
-              placeholder='Title'
+              type="text"
+              placeholder="Title"
               value={newEventTitle}
               onChange={(e) => setNewEventTitle(e.target.value)}
             />
-            <textarea
-              placeholder='Text'
-              value={newEventText}
-              onChange={(e) => setNewEventText(e.target.value)}
-            />
+            {showTextForm && (
+              <textarea
+                placeholder="Text"
+                value={newEventText}
+                onChange={(e) => setNewEventText(e.target.value)}
+              />
+            )}
+
             {showImageForm && (
-              <input type='file' onChange={handleImageUpload} />
+              <input type="file" onChange={handleImageUpload} />
             )}
             <input
-              type='text'
-              placeholder='Tags'
+              type="text"
+              placeholder="Tags"
               value={newEventTags}
               onChange={(e) => setNewEventTags(e.target.value)}
             />
-            <button onClick={handleSubmit}>Submit</button>
+            <button onClick={() => handleSubmit(showTextForm)}>Submit</button>
             <button onClick={resetForm}>Cancel</button>
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Timeline
+export default Timeline;

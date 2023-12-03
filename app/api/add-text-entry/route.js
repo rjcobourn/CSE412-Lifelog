@@ -36,11 +36,13 @@ export async function POST(request) {
     `;
     } catch (error) {
       await sql`ROLLBACK`;
+      console.log(error);
       return NextResponse.json({ error }, { status: 500 });
     }
 
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error }, { status: 500 });
   }
 }
