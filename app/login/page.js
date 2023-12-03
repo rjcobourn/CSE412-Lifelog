@@ -40,10 +40,16 @@ export default function Login() {
     }
   };
 
-  const handleLogin = async () => {
+    const handleLogin = async () => {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-
+  
+    // Check if the username and password fields are empty
+    if (!username.trim() || !password.trim()) {
+      if (notyf) notyf.error("Username and password are required.");
+      return; // Stop the function if fields are empty
+    }
+  
     try {
       const response = await fetch("/api/login", {
         method: "POST",
@@ -52,7 +58,7 @@ export default function Login() {
         },
         body: JSON.stringify({ username, password }),
       });
-
+  
       if (response.ok) {
         window.location.href = "/";
       } else {
@@ -63,6 +69,7 @@ export default function Login() {
       if (notyf) notyf.error("Error during login: " + error.message);
     }
   };
+  
 
   const handleErrorResponse = (status, message, action) => {
     if (!notyf) return;
