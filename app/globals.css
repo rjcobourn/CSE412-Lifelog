@@ -46,3 +46,63 @@ body {
   background-color: #2d77ed;
   margin-top: 20px;
 }
+
+.timeline {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 20px;
+  height: 95vh;
+}
+
+.timeline-item {
+  color: white;
+  width: 50vh;
+  height: 50vh;
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  /* Add other styles like background, boxShadow, borderRadius, etc. */
+}
+
+.add-button {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin: 10px;
+  font-size: 42px;
+  cursor: pointer;
+  background: #555555;
+  /* Add other styles like background color, hover effects, etc. */
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 1001;
+  /* Add more styling as needed...much more needed */
+}
