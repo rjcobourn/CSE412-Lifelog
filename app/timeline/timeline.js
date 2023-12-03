@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FiFileText, FiImage } from "react-icons/fi";
 
 const timelineEvents = [
@@ -20,6 +20,20 @@ const Timeline = () => {
   const [newEventText, setNewEventText] = useState("");
   const [newEventImage, setNewEventImage] = useState(null);
   const [newEventTags, setNewEventTags] = useState("");
+
+  //TODO: This scrolling works but is a bit janky. Maybe try to improve it.
+  useEffect(() => {
+    const handleWheel = (event) => {
+      event.preventDefault();
+      window.scrollBy({ left: 2 * event.deltaY, behavior: "smooth" });
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -116,13 +130,15 @@ const Timeline = () => {
           ref={(el) => (eventRefs.current[event.id] = el)}
           className="timeline-item"
         >
-          <h3>{event.title}</h3>
-          {event.text && <p>{event.text}</p>}
+          <div style={{ height: "10%", display: "flex", alignItems: "center" }}>
+            <h3 style={{ padding: 0, margin: 0 }}>{event.title}</h3>
+          </div>
+          {event.text && <p style={{ height: "90%" }}>{event.text}</p>}
           {event.image && (
             <img
               src={event.image}
               alt={event.title}
-              style={{ width: "100%", height: "auto" }}
+              style={{ width: "100%", height: "90%", objectFit: "cover" }}
             />
           )}
         </div>
