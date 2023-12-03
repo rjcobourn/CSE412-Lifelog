@@ -100,9 +100,49 @@ body {
 }
 
 .modal {
-  background-color: white;
+  background-color: #121212;
   padding: 20px;
   border-radius: 5px;
   z-index: 1001;
-  /* Add more styling as needed...much more needed */
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.modal input,
+.modal textarea {
+  background-color: #121212;
+  color: white;
+  border: 1px solid white;
+  border-radius: 3px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.placeholders {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.image-placeholder,
+.text-placeholder {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-placeholder p {
+  background-color: #121212;
+  color: white;
+  border: 1px solid white;
+  border-radius: 3px;
+  padding: 8px;
+  margin-bottom: 10px;
 }
