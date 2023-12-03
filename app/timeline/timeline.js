@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { FiFileText, FiImage } from 'react-icons/fi'
 
 const timelineEvents = [
   { id: 1, title: 'Event 1', text: '', image: null },
@@ -12,7 +13,9 @@ const Timeline = () => {
   const [newEventId, setNewEventId] = useState(timelineEvents.length + 1)
   const eventRefs = useRef({})
 
-  const [showForm, setShowForm] = useState(false)
+  const [showTextForm, setShowTextForm] = useState(false)
+  const [showImageForm, setShowImageForm] = useState(false)
+
   const [newEventTitle, setNewEventTitle] = useState('')
   const [newEventText, setNewEventText] = useState('')
   const [newEventImage, setNewEventImage] = useState(null)
@@ -44,6 +47,17 @@ const Timeline = () => {
         })
       }
     }, 0)
+
+    resetForm()
+  }
+
+  const resetForm = () => {
+    setNewEventTitle('')
+    setNewEventText('')
+    setNewEventImage(null)
+    setNewEventTags('')
+    setShowTextForm(false)
+    setShowImageForm(false)
   }
 
   const handleSubmit = async () => {
@@ -74,7 +88,15 @@ const Timeline = () => {
       }
     } catch (error) {
       console.error('An error occurred:', error)
+	}
+	
+    if (showTextForm) {
+      handleAddEvent(newEventTitle, newEventText, null)
+    } else if (showImageForm) {
+      handleAddEvent(newEventTitle, newEventText, newEventImage)
     }
+
+    resetForm()
   }
 
   const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`
@@ -98,11 +120,14 @@ const Timeline = () => {
           )}
         </div>
       ))}
-      <div className='add-button' onClick={() => setShowForm(true)}>
-        +
+      <div className='add-button' onClick={() => setShowTextForm(true)}>
+        <FiFileText size={30} style={{ cursor: 'pointer' }} />
+      </div>
+      <div className='add-button' onClick={() => setShowImageForm(true)}>
+        <FiImage size={30} style={{ cursor: 'pointer' }} />
       </div>
 
-      {showForm && (
+      {(showTextForm || showImageForm) && (
         <div className='modal-backdrop'>
           <div className='modal'>
             <input
@@ -116,7 +141,9 @@ const Timeline = () => {
               value={newEventText}
               onChange={(e) => setNewEventText(e.target.value)}
             />
-            <input type='file' onChange={handleImageUpload} />
+            {showImageForm && (
+              <input type='file' onChange={handleImageUpload} />
+            )}
             <input
               type='text'
               placeholder='Tags'
@@ -124,7 +151,7 @@ const Timeline = () => {
               onChange={(e) => setNewEventTags(e.target.value)}
             />
             <button onClick={handleSubmit}>Submit</button>
-            <button onClick={() => setShowForm(false)}>Cancel</button>
+            <button onClick={resetForm}>Cancel</button>
           </div>
         </div>
       )}
