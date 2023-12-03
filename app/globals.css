@@ -79,7 +79,6 @@ body {
   justify-content: center;
   align-items: center;
   border: 1px solid #ccc;
-  /* Add other styles like background, boxShadow, borderRadius, etc. */
 }
 
 .add-button {
@@ -95,7 +94,6 @@ body {
   font-size: 42px;
   cursor: pointer;
   background: #555555;
-  /* Add other styles like background color, hover effects, etc. */
 }
 
 .modal-backdrop {
@@ -109,30 +107,33 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
 }
 
 .modal {
   background-color: #121212;
+  border: 4px solid rgba(211, 211, 211, 0.638);
+  border-radius: 15px;
   padding: 20px;
-  border-radius: 5px;
   z-index: 1001;
-  width: 400px;
-  height: 400px;
+  width: 625px;
+  height: 625px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   color: white;
 }
 
 .modal input,
 .modal textarea {
-  background-color: #121212;
-  color: white;
-  border: 1px solid white;
-  border-radius: 3px;
-  padding: 8px;
-  margin-bottom: 10px;
+  background-color: rgba(124, 124, 124, 0.293);
+  border: none;
+  /* border: 1px solid lightgray; */
+  border-radius: 4px;
+  padding: 7px;
+  margin: 5px;
+  width: 75%;
 }
 
 .placeholders {
@@ -147,8 +148,8 @@ body {
   box-sizing: border-box;
   padding: 10px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .text-placeholder p {
@@ -158,4 +159,89 @@ body {
   border-radius: 3px;
   padding: 8px;
   margin-bottom: 10px;
+}
+
+.event-text-input {
+  min-height: 320px;
+  padding: 10px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.tags-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin-right: 50px;
+  margin-left: 50px;
+  min-height: 5px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(165, 208, 255, 0.35);
+  color: white;
+  border-radius: 16px;
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+  
+.tag-delete-btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+}
+  
+.tags-input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
+  width: 40% !important;
+}
+
+.submit-cancel-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px;
+  /* border: 1px solid white; */
+}
+
+.submit-button {
+	padding: 10px 20px;
+	margin: 5px;
+	font-size: .95em;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	background-color: rgba(115, 183, 255, 0.5);
+	transition: background-color 0.2s, transform 0.1s;
+}
+
+.cancel-button {
+	padding: 10px 20px;
+	margin: 5px;
+	font-size: .95em;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	background-color: rgba(193, 223, 255, 0.394);
+	transition: background-color 0.2s, transform 0.1s;
+}
+
+.submit-button:hover {
+	background-color: #8ac3ff92;
+	transform: scale(1.02);
+}
+
+.cancel-button:hover {
+	background-color: #8ac3ff92;
+	transform: scale(1.02);
 }

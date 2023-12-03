@@ -5,7 +5,7 @@ const timelineEvents = [
   { id: 1, title: "Event 1", text: "", image: null },
   { id: 2, title: "Event 2", text: "", image: null },
   { id: 3, title: "Event 3", text: "", image: null },
-  // ... more events
+  // More Events - testing
 ];
 
 const Timeline = () => {
@@ -19,7 +19,7 @@ const Timeline = () => {
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventText, setNewEventText] = useState("");
   const [newEventImage, setNewEventImage] = useState(null);
-  const [newEventTags, setNewEventTags] = useState("");
+  const [newEventTags, setNewEventTags] = useState([]);
 
   //TODO: This scrolling works but is a bit janky. Maybe try to improve it.
   useEffect(() => {
@@ -35,12 +35,32 @@ const Timeline = () => {
     };
   }, []);
 
+  const resizeTextarea = (event) => {
+    event.target.style.height = 'auto';
+    event.target.style.height = event.target.scrollHeight + 'px';
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       setNewEventImage(file);
     }
   };
+
+  const handleTagInput = (e) => {
+    if (e.key === ' ' || e.key === ',' || e.key === 'Enter') {
+      const value = e.target.value.trim();
+      if (value && !newEventTags.includes(value)) {
+        setNewEventTags([...newEventTags, value]);
+      }
+      e.target.value = '';
+      e.preventDefault();
+    }
+  };  
+  const removeTag = (index) => {
+    setNewEventTags(newEventTags.filter((_, idx) => idx !== index));
+  };
+
 
   const handleAddEvent = (title, text, image) => {
     const newEvent = {
@@ -63,15 +83,6 @@ const Timeline = () => {
     }, 0);
 
     resetForm();
-  };
-
-  const resetForm = () => {
-    setNewEventTitle("");
-    setNewEventText("");
-    setNewEventImage(null);
-    setNewEventTags("");
-    setShowTextForm(false);
-    setShowImageForm(false);
   };
 
   const handleSubmit = async (showTextForm) => {
@@ -120,6 +131,15 @@ const Timeline = () => {
     resetForm();
   };
 
+  const resetForm = () => {
+    setNewEventTitle("");
+    setNewEventText("");
+    setNewEventImage(null);
+    setNewEventTags([]);
+    setShowTextForm(false);
+    setShowImageForm(false);
+  };
+
   const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
 
   return (
@@ -164,20 +184,32 @@ const Timeline = () => {
                 placeholder="Text"
                 value={newEventText}
                 onChange={(e) => setNewEventText(e.target.value)}
+                onInput={resizeTextarea}
+                className="event-text-input"
               />
             )}
 
             {showImageForm && (
               <input type="file" onChange={handleImageUpload} />
             )}
+            <div className="tags-input-container">
+              {newEventTags.map((tag, index) => (
+                <span key={index} className="tag">
+                  {tag}
+                  <button onClick={() => removeTag(index)} className="tag-delete-btn">x</button>
+                </span>
+              ))}
+            </div>
             <input
               type="text"
               placeholder="Tags"
-              value={newEventTags}
-              onChange={(e) => setNewEventTags(e.target.value)}
+              onKeyDown={handleTagInput}
+              className="tags-input"
             />
-            <button onClick={() => handleSubmit(showTextForm)}>Submit</button>
-            <button onClick={resetForm}>Cancel</button>
+            <div className="submit-cancel-buttons">
+              <button className="submit-button" onClick={() => handleSubmit(showTextForm)}>Submit</button>
+              <button className="cancel-button" onClick={resetForm}>Cancel</button>
+            </div>
           </div>
         </div>
       )}
