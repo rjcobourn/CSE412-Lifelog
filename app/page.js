@@ -1,3 +1,4 @@
 export default function Home() {
-  return <div>Home</div>;
+  // This will not be rendered if redirection occurs
+  return <></>;
 }
