@@ -94,7 +94,7 @@ const Timeline = () => {
           body: JSON.stringify({
             title: newEventTitle,
             text: newEventText,
-            tags: "{}",
+            tags: newEventTags,
           }),
         });
       } else {
@@ -117,7 +117,7 @@ const Timeline = () => {
             title: newEventTitle,
             imagetype: mimeType,
             imagedata: base64String,
-            tags: "{}",
+            tags: newEventTags,
           }),
         });
       }

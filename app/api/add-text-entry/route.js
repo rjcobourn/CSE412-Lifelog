@@ -1,11 +1,11 @@
 import { db } from "@vercel/postgres";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { authenticateToken } from "../utils";
 
 export async function POST(request) {
   try {
     const { title, text, tags } = await request.json();
-
     // Authenticate the user
     const authResult = await authenticateToken(request);
     if (authResult.error) {
@@ -21,10 +21,12 @@ export async function POST(request) {
     const client = await db.connect();
     try {
       await client.sql`BEGIN`;
+	  // Convert the array of tags into a PostgreSQL array string
+	  const tagsArrayString = `{${tags.join(',')}}`;
       // Insert the new entry into the Content table
       const contentInsert = await sql`
         INSERT INTO Content (username, contenttype, title, tags)
-        VALUES (${decoded.username}, 'Entry', ${title}, ${tags})
+        VALUES (${decoded.username}, 'Entry', ${title}, ${tagsArrayString})
         RETURNING contentid;
     `;
 
