@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { db } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { authenticateToken } from "../utils";
 
@@ -17,12 +17,15 @@ export async function POST(request) {
 
     const { decoded } = authResult;
 
+    const client = await db.connect();
+
     // Get the contentid of the entry to be deleted
-    const content = await sql`
+    const content = await client.sql`
         SELECT * FROM Content WHERE contentid = ${contentid};
     `;
 
     if (content.rowCount === 0) {
+      client.end();
       return NextResponse.json(
         { message: "Content does not exist" },
         { status: 404 }
@@ -31,18 +34,20 @@ export async function POST(request) {
 
     // Check if the user is the owner of the content
     if (content.rows[0].username !== decoded.username) {
+      client.end();
       return NextResponse.json(
         { message: "You are not the owner of this content" },
         { status: 401 }
       );
     }
 
-    await sql`
+    await client.sql`
         DELETE FROM Content WHERE contentid = ${contentid};
     `;
 
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
+    client.end();
     return NextResponse.json({ error }, { status: 500 });
   }
 }

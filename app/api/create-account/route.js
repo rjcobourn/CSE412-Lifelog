@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { db } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -8,7 +8,7 @@ export async function POST(request) {
     const { username, password } = await request.json();
 
     // Check if the username already exists
-    const user = await sql`
+    const user = await client.sql`
       SELECT * FROM Users WHERE Username = ${username};
     `;
 
@@ -21,12 +21,14 @@ export async function POST(request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const client = await db.connect();
     try {
-      await sql`BEGIN`;
-      await sql`
+      await client.sql`BEGIN`;
+      await client.sql`
       INSERT INTO Users (Username, Hash)
       VALUES (${username}, ${hashedPassword});
     `;
+      await client.sql`COMMIT`;
 
       const token = jwt.sign({ username: username }, process.env.JWT_SECRET, {
         expiresIn: "24h",
@@ -45,8 +47,10 @@ export async function POST(request) {
 
       return response;
     } catch (error) {
-      await sql`ROLLBACK`;
+      await client.sql`ROLLBACK`;
       return NextResponse.json({ error }, { status: 500 });
+    } finally {
+      client.end();
     }
   } catch (error) {
     // undo the user insertion if it fails

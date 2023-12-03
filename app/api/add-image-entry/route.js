@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { db } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { authenticateToken } from "../utils";
 
@@ -19,11 +19,11 @@ export async function POST(request) {
 
     // We need to wrap the two SQL queries in a transaction so that a failure in entry insertion will not result in a dangling Content entry
     const decodedImageData = Buffer.from(imagedata, "base64");
-
+    const client = await db.connect();
     try {
-      await sql`BEGIN`;
+      await client.sql`BEGIN`;
       // Insert the new entry into the Content table
-      const contentInsert = await sql`
+      const contentInsert = await client.sql`
         INSERT INTO Content (username, contenttype, title, tags)
         VALUES (${decoded.username}, 'Image', ${title}, ${tags})
         RETURNING contentid;
@@ -31,14 +31,17 @@ export async function POST(request) {
 
       const contentid = contentInsert.rows[0].contentid;
 
-      await sql`
+      await client.sql`
         INSERT INTO Image (contentid, imagetype, imagedata)
         VALUES (${contentid}, ${imagetype}, ${decodedImageData});
     `;
+      await client.sql`COMMIT`;
     } catch (error) {
-      await sql`ROLLBACK`;
+      await client.sql`ROLLBACK`;
       console.log(error);
       return NextResponse.json({ error }, { status: 500 });
+    } finally {
+      client.end();
     }
 
     return NextResponse.json({ message: "Success" }, { status: 200 });
