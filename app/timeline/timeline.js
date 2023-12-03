@@ -61,8 +61,35 @@ const Timeline = () => {
   }
 
   const handleSubmit = async () => {
-    // ... (your existing submit logic)
+    const formData = new FormData()
+    formData.append('title', newEventTitle)
+    formData.append('text', newEventText)
+    formData.append('tags', newEventTags)
+    if (newEventImage) {
+      formData.append('image', newEventImage)
+    }
 
+    try {
+      const response = await fetch('/api/route', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+      if (data.message === 'Success') {
+        handleAddEvent(newEventTitle, newEventText, newEventImage)
+        setNewEventTitle('')
+        setNewEventText('')
+        setNewEventImage(null)
+        setNewEventTags('')
+        setShowForm(false)
+      } else {
+        console.error(data.error)
+      }
+    } catch (error) {
+      console.error('An error occurred:', error)
+	}
+	
     if (showTextForm) {
       handleAddEvent(newEventTitle, newEventText, null)
     } else if (showImageForm) {
