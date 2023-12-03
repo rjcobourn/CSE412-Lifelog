@@ -45,6 +45,7 @@ export async function POST(request) {
         DELETE FROM Content WHERE contentid = ${contentid};
     `;
 
+    client.end();
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
     client.end();

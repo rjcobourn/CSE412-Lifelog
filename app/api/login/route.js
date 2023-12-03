@@ -7,7 +7,8 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
 
-    const result = await sql`
+    const client = await db.connect();
+    const result = await client.sql`
       SELECT * FROM Users WHERE Username = ${username};
     `;
 
