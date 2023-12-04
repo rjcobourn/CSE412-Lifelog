@@ -108,13 +108,9 @@ const Timeline = () => {
     setNewEventTags(newEventTags.filter((_, idx) => idx !== index));
   };
 
-  const handleAddEvent = (title, entrytext, image) => {
-    const maxId = events.reduce((max, event) => {
-      return event.contentid > max ? event.contentid : max;
-    }, 0);
-
+  const handleAddEvent = (title, entrytext, image, contentid) => {
     const newEvent = {
-      contentid: maxId + 1,
+      contentid: contentid,
       title,
       entrytext,
       image: image ? URL.createObjectURL(image) : null,
@@ -147,7 +143,22 @@ const Timeline = () => {
             text: newEventText,
             tags: newEventTags,
           }),
-        });
+        })
+          .then((response) => {
+            // Check if the request was successful
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            handleAddEvent(
+              newEventTitle,
+              newEventText,
+              newEventImage,
+              data.contentid
+            );
+          });
       } else {
         // Handle image form submission
         const reader = new FileReader();
@@ -172,11 +183,23 @@ const Timeline = () => {
             imagedata: base64String,
             tags: newEventTags,
           }),
-        });
+        })
+          .then((response) => {
+            // Check if the request was successful
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            handleAddEvent(
+              newEventTitle,
+              newEventText,
+              newEventImage,
+              data.contentid
+            );
+          });
       }
-
-      // Add event to the timeline
-      handleAddEvent(newEventTitle, newEventText, newEventImage);
     } catch (error) {
       console.error("Error during submission:", error);
       // TODO: show error message

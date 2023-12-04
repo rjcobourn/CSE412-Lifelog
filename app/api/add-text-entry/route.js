@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { authenticateToken } from "../utils";
 
 export async function POST(request) {
+  let contentid;
   try {
     const { title, text, tags } = await request.json();
     // Authenticate the user
@@ -42,7 +43,7 @@ export async function POST(request) {
         [decoded.username, title, tagsArrayString]
       );
 
-      const contentid = contentInsert.rows[0].contentid;
+      contentid = contentInsert.rows[0].contentid;
 
       await client.query(
         `
@@ -60,7 +61,10 @@ export async function POST(request) {
       client.end();
     }
 
-    return NextResponse.json({ message: "Success" }, { status: 200 });
+    return NextResponse.json(
+      { contentid, message: "Success" },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error }, { status: 500 });
