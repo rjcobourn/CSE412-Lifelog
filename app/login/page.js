@@ -9,7 +9,7 @@ export default function Login() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const notyfInstance = new Notyf({
-        duration: 8000, // Duration in milliseconds, e.g., 5000 for 5 seconds
+        duration: 8000 // Duration in milliseconds, e.g., 5000 for 5 seconds
         // You can add other Notyf options here
       });
       setNotyf(notyfInstance);

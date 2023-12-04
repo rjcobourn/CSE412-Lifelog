@@ -217,6 +217,11 @@ const Timeline = () => {
     setShowImageForm(false);
   };
 
+  const handleLogout = () => {
+    document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = '/login';
+  };
+
   const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
 
   return (
@@ -233,6 +238,9 @@ const Timeline = () => {
           onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
         />
       </div>
+      <button onClick={handleLogout} style={{ position: 'absolute', top: 0, right: 0, padding: '10px' }}>
+        Logout
+      </button>
       {filteredEvents.map((event) => (
         <div
           key={event.contentid}
