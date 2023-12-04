@@ -3,6 +3,17 @@ import { NextResponse } from "next/server";
 import { authenticateToken } from "../utils";
 
 export async function POST(request) {
+  const client = new Client({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  });
+
   try {
     const { contentid } = await request.json();
 
@@ -17,16 +28,6 @@ export async function POST(request) {
 
     const { decoded } = authResult;
 
-    const client = new Client({
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      database: process.env.DB_NAME,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    });
     await client.connect();
 
     // Get the contentid of the entry to be deleted
