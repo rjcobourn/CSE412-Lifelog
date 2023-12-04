@@ -36,7 +36,7 @@ export async function POST(request) {
       // Insert the new entry into the Content table
       const contentInsert = await client.query(
         `
-        INSERT INTO Content (username, contenttype, title, tags)
+        INSERT INTO content (username, contenttype, title, tags)
         VALUES ($1, 'Entry', $2, $3)
         RETURNING contentid;
     `,
@@ -47,7 +47,7 @@ export async function POST(request) {
 
       await client.query(
         `
-        INSERT INTO Entry (contentid, entrytext)
+        INSERT INTO entry (contentid, entrytext)
         VALUES ($1, $2);
     `,
         [contentid, text]

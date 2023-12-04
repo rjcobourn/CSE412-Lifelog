@@ -36,7 +36,7 @@ export async function POST(request) {
       // Insert the new entry into the Content table
       const contentInsert = await client.query(
         `
-        INSERT INTO Content (username, contenttype, title, tags)
+        INSERT INTO content (username, contenttype, title, tags)
         VALUES ($1, 'Image', $2, $3)
         RETURNING contentid;
     `,
@@ -47,7 +47,7 @@ export async function POST(request) {
 
       await client.query(
         `
-        INSERT INTO Image (contentid, imagetype, imagedata)
+        INSERT INTO image (contentid, imagetype, imagedata)
         VALUES ($1, $2, $3);
     `,
         [contentid, imagetype, decodedImageData]

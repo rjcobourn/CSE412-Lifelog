@@ -33,7 +33,7 @@ export async function POST(request) {
     // Get the contentid of the entry to be deleted
     const content = await client.query(
       `
-        SELECT * FROM Content WHERE contentid = $1;
+        SELECT * FROM content WHERE contentid = $1;
     `,
       [contentid]
     );
@@ -57,7 +57,7 @@ export async function POST(request) {
 
     await client.query(
       `
-        DELETE FROM Content WHERE contentid = $1};
+        DELETE FROM content WHERE contentid = $1;
     `,
       [contentid]
     );

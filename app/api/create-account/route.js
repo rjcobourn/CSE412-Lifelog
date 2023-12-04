@@ -22,7 +22,7 @@ export async function POST(request) {
     // Check if the username already exists
     const user = await client.query(
       `
-      SELECT * FROM Users WHERE Username = $1;
+      SELECT * FROM users WHERE username = $1;
     `,
       [username]
     );
@@ -40,7 +40,7 @@ export async function POST(request) {
       await client.query(`BEGIN`);
       await client.query(
         `
-      INSERT INTO Users (Username, Hash)
+      INSERT INTO Users (username, hash)
       VALUES ($1, $2);
     `,
         [username, hashedPassword]

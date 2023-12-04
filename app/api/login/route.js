@@ -20,7 +20,7 @@ export async function POST(request) {
     await client.connect();
     const result = await client.query(
       `
-      SELECT * FROM Users WHERE Username = $1;
+      SELECT * FROM users WHERE Username = $1;
     `,
       [username]
     );
