@@ -1,4 +1,4 @@
-import { db } from "@vercel/postgres";
+import { Client } from "pg";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -7,10 +7,25 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
 
-    const client = await db.connect();
-    const result = await client.sql`
-      SELECT * FROM Users WHERE Username = ${username};
-    `;
+    const client = new Client({
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
+    await client.connect();
+    const result = await client.query(
+      `
+      SELECT * FROM Users WHERE Username = $1;
+    `,
+      [username]
+    );
+
+    client.end();
 
     if (result.rowCount === 0) {
       return NextResponse.json(
