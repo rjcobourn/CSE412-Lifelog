@@ -34,17 +34,50 @@ const Timeline = () => {
   };
 
   useEffect(() => {
+    let animationFrameId;
+    let targetScrollX = window.scrollX;
+    let isAnimating = false;
+  
+    const smoothScroll = () => {
+      // Calculate the difference between the target and current scroll positions
+      const difference = targetScrollX - window.scrollX;
+  
+      // If the difference is small enough, stop the animation
+      if (Math.abs(difference) < 0.5) {
+        isAnimating = false;
+        return;
+      }
+  
+      // Move a fraction of the distance towards the target
+      const step = difference * 0.1;
+      window.scrollBy({ left: step, behavior: 'auto' });
+  
+      // Continue the animation
+      animationFrameId = requestAnimationFrame(smoothScroll);
+    };
+  
     const handleWheel = (event) => {
       event.preventDefault();
-      window.scrollBy({ left: 2 * event.deltaY, behavior: "smooth" });
+      // Update the target scroll position
+      targetScrollX += event.deltaY;
+  
+      // Start the smooth scroll animation if it's not already running
+      if (!isAnimating) {
+        isAnimating = true;
+        animationFrameId = requestAnimationFrame(smoothScroll);
+      }
     };
-
+  
     window.addEventListener("wheel", handleWheel, { passive: false });
-
+  
     return () => {
       window.removeEventListener("wheel", handleWheel);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -265,11 +298,11 @@ const Timeline = () => {
   const timelineWidth = `calc(${(filteredEvents.length + 1) * 50}vh + 32px)`;
 
   return (
-	<div>
-	  <div>
+    <div>
+      <div>
         {/* Central header w logo and searchbar */}
-	    <div className="fixed-header">
-	      <div className="lifelog">
+        <div className="fixed-header">
+          <div className="lifelog">
             LifeLog
           </div>
           <input
@@ -286,7 +319,7 @@ const Timeline = () => {
         >
           Logout
         </button>
-	  </div>
+      </div>
       <div className="timeline" style={{ width: timelineWidth }}>
         {filteredEvents.map((event) => (
           <div
@@ -407,7 +440,7 @@ const Timeline = () => {
           </div>
         )}
       </div>
-	</div>
+    </div>
   );
 };
 
