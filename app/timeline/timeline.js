@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 
 const Timeline = () => {
   const [events, setEvents] = useState([]);
-  const eventRefs = useRef([]);
+  const eventRefs = useRef({});
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState(events);
   const [showTextForm, setShowTextForm] = useState(false);
@@ -57,7 +57,6 @@ const Timeline = () => {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
           // Convert any image data into a blob URL
           data.timelineData.forEach((event) => {
             if (event.contenttype === "Image") {
@@ -65,7 +64,14 @@ const Timeline = () => {
               event.image = URL.createObjectURL(blob);
             }
           });
+          // Convert null tags to empty arrays
+          data.timelineData.forEach((event) => {
+            if (event.tags === null) {
+              event.tags = [];
+            }
+          });
           setEvents(data.timelineData);
+          console.log(data.timelineData);
         });
     }
     fetchData();
@@ -115,15 +121,15 @@ const Timeline = () => {
       title,
       entrytext,
       image: image ? URL.createObjectURL(image) : null,
-      tags: newEventTags,
+      tags: newEventTags || [],
       contenttype: image ? "Image" : "Entry",
     };
 
     setEvents([...events, newEvent]);
 
     setTimeout(() => {
-      if (eventRefs.current[events.length - 1]) {
-        eventRefs.current[events.length - 1].scrollIntoView({
+      if (eventRefs.current[contentid]) {
+        eventRefs.current[contentid].scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
@@ -294,6 +300,8 @@ const Timeline = () => {
               width: "100%",
               textAlign: "center",
               position: "relative",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
             <h3 style={{ padding: 0, margin: 0 }}>{event.title}</h3>
@@ -310,15 +318,31 @@ const Timeline = () => {
             </button>
           </div>
           {event.contenttype === "Entry" && (
-            <p style={{ height: "90%" }}>{event.entrytext}</p>
+            <p
+              style={{
+                height: "80%",
+                overflow: "auto",
+                padding: "20px",
+              }}
+            >
+              {event.entrytext}
+            </p>
           )}
           {event.contenttype === "Image" && (
             <img
               src={event.image}
               alt={event.title}
-              style={{ width: "100%", height: "90%", objectFit: "cover" }}
+              style={{ width: "100%", height: "80%", objectFit: "cover" }}
             />
           )}
+          <div style={{ height: "10%", display: "flex", alignItems: "center" }}>
+            {event.tags &&
+              event.tags.map((tag, index) => (
+                <span key={index} className="tag">
+                  {tag}
+                </span>
+              ))}
+          </div>
         </div>
       ))}
       <div className="add-button" onClick={() => setShowTextForm(true)}>

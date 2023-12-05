@@ -64,7 +64,6 @@ body {
 .timeline {
   display: flex;
   align-items: center;
-  white-space: nowrap;
   padding: 20px;
   height: 100%;
 }
@@ -250,9 +249,9 @@ body {
   position: absolute;
   top: 0;
   right: 0;
+  margin: 3px;
   width: 20px;
   height: 20px;
-  margin: 2px;
   font-size: 0.95em;
   cursor: pointer;
   border: none;
