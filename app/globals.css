@@ -72,7 +72,7 @@ body {
 .fixed-header {
   position: fixed;
   flex-direction: column;
-  top: 8vh;
+  top: 6vh;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -84,17 +84,18 @@ body {
 
 .lifelog {
   font-family: "Pacifico", cursive;
-  font-size: 68px;
+  font-size: 75px;
   margin: 2vh;
 }
 
 .search-input {
   margin: 0.5vh;
-  height: 3vh;
-  width: 30vw;
+  height: 3.5vh;
+  width: 35vw;
   border-radius: 15px;
   border: none;
-  text-indent: 10px;
+  text-indent: 15px;
+  font-size: large;
 }
 
 .logout-button {
@@ -102,13 +103,13 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  padding: 10px;
-  margin: 15px;
-  height: 35px;
-  width: 70px;
+  margin: 18px;
+  height: 3.5vh;
+  width: 7.2vh;
   cursor: pointer;
   border-radius: 5px;
   border: none;
+  font-size: large;
   transition: background-color 0.2s, transform 0.1s;
 }
 
@@ -121,7 +122,7 @@ body {
   display: flex;
   align-items: center;
   padding: 20px;
-  padding-top: 30vh;
+  padding-top: 32vh;
   height: 100%;
 }
 
