@@ -262,7 +262,7 @@ const Timeline = () => {
     });
   };
 
-  const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
+  const timelineWidth = `calc(${(filteredEvents.length + 1) * 50}vh + 32px)`;
 
   return (
 	<div>
