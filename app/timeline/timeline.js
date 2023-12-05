@@ -33,51 +33,75 @@ const Timeline = () => {
     return blob;
   };
 
+  // Function to enable both smooth mousewheel and middlemouse scrolling
   useEffect(() => {
     let animationFrameId;
     let targetScrollX = window.scrollX;
     let isAnimating = false;
+    let middleMouseActive = false;
   
     const smoothScroll = () => {
-      // Calculate the difference between the target and current scroll positions
+      if (middleMouseActive) {
+        isAnimating = false;
+        return;
+      }
+
       const difference = targetScrollX - window.scrollX;
-  
       // If the difference is small enough, stop the animation
       if (Math.abs(difference) < 0.5) {
         isAnimating = false;
         return;
       }
-  
+
       // Move a fraction of the distance towards the target
       const step = difference * 0.1;
       window.scrollBy({ left: step, behavior: 'auto' });
-  
+
       // Continue the animation
       animationFrameId = requestAnimationFrame(smoothScroll);
     };
   
     const handleWheel = (event) => {
+      if (middleMouseActive) {
+        return;
+      }
       event.preventDefault();
       // Update the target scroll position
       targetScrollX += event.deltaY;
-  
+      
       // Start the smooth scroll animation if it's not already running
       if (!isAnimating) {
         isAnimating = true;
         animationFrameId = requestAnimationFrame(smoothScroll);
       }
     };
+
+    const handleMouseDown = (event) => {
+      if (event.button === 1) {
+        middleMouseActive = true;
+      }
+    };
+    const handleMouseUp = (event) => {
+      if (event.button === 1) {
+        middleMouseActive = false;
+        // Update targetScrollX to the current scroll position when middle-mouse scrolling ends
+        targetScrollX = window.scrollX;
+      }
+    }; 
   
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
   
     return () => {
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
     };
   }, []);
-  
 
   useEffect(() => {
     async function fetchData() {
