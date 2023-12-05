@@ -282,14 +282,7 @@ const Timeline = () => {
         </div>
         <button
           onClick={handleLogout}
-          style={{
-            position: "fixed",
-            top: 0,
-            right: 0,
-            padding: "10px",
-            margin: "15px",
-            cursor: "pointer",
-          }}
+          className="logout-button"
         >
           Logout
         </button>

@@ -91,6 +91,9 @@ export default function Login() {
 
   return (
     <div className="login-page-container">
+	  <div className="lifelog">
+        LifeLog
+      </div>
       <div className="login-ui">
         <div className="form-group">
           <label className="primary-color display-block" htmlFor="username">

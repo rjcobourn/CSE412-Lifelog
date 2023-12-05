@@ -23,6 +23,7 @@ body {
 
 .login-page-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -32,8 +33,9 @@ body {
 .login-ui {
   background-color: #303030;
   padding: 50px;
-  border-radius: 5px;
+  border-radius: 8px;
   width: max(20vw, 300px);
+  margin: 25px;
 }
 
 .display-block {
@@ -83,15 +85,36 @@ body {
 .lifelog {
   font-family: "Pacifico", cursive;
   font-size: 64px;
+  margin: 2vh;
 }
 
 .search-input {
-  margin: 2.5vh;
+  margin: 0.5vh;
   height: 2.5vh;
   width: 30vw;
   border-radius: 15px;
   border: none;
   text-indent: 10px;
+}
+
+.logout-button {
+  background-color: rgba(193, 223, 255, 0.394);
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  margin: 15px;
+  height: 35px;
+  width: 70px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.logout-button:hover {
+	background-color: #8ac3ff92;
+	transform: scale(1.02);
 }
 
 .timeline {
@@ -130,7 +153,12 @@ body {
   margin: 10px;
   font-size: 42px;
   cursor: pointer;
-  background: #555555;
+  background: rgba(193, 223, 255, 0.394);
+}
+
+.add-button:hover {
+	background-color: #8ac3ff92;
+	transform: scale(1.04);
 }
 
 .modal-backdrop {
@@ -262,7 +290,8 @@ textarea::placeholder {
 
 .submit-button {
   padding: 10px 20px;
-  margin: 5px;
+  margin: 10px;
+  margin-right: 12.5px;
   font-size: 0.95em;
   cursor: pointer;
   border: none;
@@ -273,7 +302,8 @@ textarea::placeholder {
 
 .cancel-button {
   padding: 10px 20px;
-  margin: 5px;
+  margin: 10px;
+  margin-left: 12.5px;
   font-size: 0.95em;
   cursor: pointer;
   border: none;
@@ -284,12 +314,12 @@ textarea::placeholder {
 
 .submit-button:hover {
   background-color: #8ac3ff92;
-  transform: scale(1.02);
+  transform: scale(1.04);
 }
 
 .cancel-button:hover {
   background-color: #8ac3ff92;
-  transform: scale(1.02);
+  transform: scale(1.04);
 }
 
 .delete-content-btn {
