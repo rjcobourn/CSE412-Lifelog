@@ -84,13 +84,13 @@ body {
 
 .lifelog {
   font-family: "Pacifico", cursive;
-  font-size: 64px;
+  font-size: 68px;
   margin: 2vh;
 }
 
 .search-input {
   margin: 0.5vh;
-  height: 2.5vh;
+  height: 3vh;
   width: 30vw;
   border-radius: 15px;
   border: none;
