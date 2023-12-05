@@ -265,148 +265,156 @@ const Timeline = () => {
   const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
 
   return (
-    <div className="timeline" style={{ width: timelineWidth }}>
-      {/* Move the search input to the top left */}
-      <div style={{ position: "fixed", top: 0, left: 0, padding: "10px" }}>
-        <input
-          type="text"
-          placeholder="Search events..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-        />
-      </div>
-      <button
-        onClick={handleLogout}
-        style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          padding: "10px",
-          margin: "10px",
-          cursor: "pointer",
-        }}
-      >
-        Logout
-      </button>
-      {filteredEvents.map((event) => (
-        <div
-          key={event.contentid}
-          ref={(el) => (eventRefs.current[event.contentid] = el)}
-          className="timeline-item"
+	<div>
+	  <div>
+        {/* Central header w logo and searchbar */}
+	    <div className="fixed-header">
+	      <div className="lifelog">
+            LifeLog
+          </div>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search events..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          />
+        </div>
+        <button
+          onClick={handleLogout}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            padding: "10px",
+            margin: "15px",
+            cursor: "pointer",
+          }}
         >
+          Logout
+        </button>
+	  </div>
+      <div className="timeline" style={{ width: timelineWidth }}>
+        {filteredEvents.map((event) => (
           <div
-            style={{
-              height: "10%",
-              width: "100%",
-              textAlign: "center",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-            }}
+            key={event.contentid}
+            ref={(el) => (eventRefs.current[event.contentid] = el)}
+            className="timeline-item"
           >
-            <h3 style={{ padding: 0, margin: 0 }}>{event.title}</h3>
-            <button
-              className="delete-content-btn"
+            <div
               style={{
+                height: "10%",
+                width: "100%",
+                textAlign: "center",
+                position: "relative",
                 display: "flex",
-                alignItems: "center",
                 justifyContent: "center",
               }}
-              onClick={() => handleDelete(event.contentid)}
             >
-              <FaTrash size={15} />
-            </button>
-          </div>
-          {event.contenttype === "Entry" && (
-            <p
-              style={{
-                height: "80%",
-                overflow: "auto",
-                padding: "20px",
-              }}
-            >
-              {event.entrytext}
-            </p>
-          )}
-          {event.contenttype === "Image" && (
-            <img
-              src={event.image}
-              alt={event.title}
-              style={{ width: "100%", height: "80%", objectFit: "cover" }}
-            />
-          )}
-          <div style={{ height: "10%", display: "flex", alignItems: "center" }}>
-            {event.tags &&
-              event.tags.map((tag, index) => (
-                <span key={index} className="tag">
-                  {tag}
-                </span>
-              ))}
-          </div>
-        </div>
-      ))}
-      <div className="add-button" onClick={() => setShowTextForm(true)}>
-        <FiFileText size={30} style={{ cursor: "pointer" }} />
-      </div>
-      <div className="add-button" onClick={() => setShowImageForm(true)}>
-        <FiImage size={30} style={{ cursor: "pointer" }} />
-      </div>
-
-      {(showTextForm || showImageForm) && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <input
-              type="text"
-              placeholder="Title"
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
-            />
-            {showTextForm && (
-              <textarea
-                placeholder="Text"
-                value={newEventText}
-                onChange={(e) => setNewEventText(e.target.value)}
-                onInput={resizeTextarea}
-                className="event-text-input"
+              <h3 style={{ verticalAlign: 'center' }}>{event.title}</h3>
+              <button
+                className="delete-content-btn"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onClick={() => handleDelete(event.contentid)}
+              >
+                <FaTrash size={15} />
+              </button>
+            </div>
+            {event.contenttype === "Entry" && (
+              <p
+                style={{
+                  height: "80%",
+                  overflow: "auto",
+                  padding: "20px",
+                }}
+              >
+                {event.entrytext}
+              </p>
+            )}
+            {event.contenttype === "Image" && (
+              <img
+                src={event.image}
+                alt={event.title}
+                style={{ width: "100%", height: "80%", objectFit: "cover" }}
               />
             )}
-            {showImageForm && (
-              <input type="file" onChange={handleImageUpload} />
-            )}
-            <div className="tags-input-container">
-              {newEventTags.map((tag, index) => (
-                <span key={index} className="tag">
-                  {tag}
-                  <button
-                    onClick={() => removeTag(index)}
-                    className="tag-delete-btn"
-                  >
-                    x
-                  </button>
-                </span>
-              ))}
-            </div>
-            <input
-              type="text"
-              placeholder="Tags"
-              onKeyDown={handleTagInput}
-              className="tags-input"
-            />
-            <div className="submit-cancel-buttons">
-              <button
-                className="submit-button"
-                onClick={() => handleSubmit(showTextForm)}
-              >
-                Submit
-              </button>
-              <button className="cancel-button" onClick={resetForm}>
-                Cancel
-              </button>
+            <div style={{ height: "10%", display: "flex", alignItems: "center" }}>
+              {event.tags &&
+                event.tags.map((tag, index) => (
+                  <span key={index} className="tag">
+                    {tag}
+                  </span>
+                ))}
             </div>
           </div>
+        ))}
+        <div className="add-button" onClick={() => setShowTextForm(true)}>
+          <FiFileText size={30} style={{ cursor: "pointer" }} />
         </div>
-      )}
-    </div>
+        <div className="add-button" onClick={() => setShowImageForm(true)}>
+          <FiImage size={30} style={{ cursor: "pointer" }} />
+        </div>
+  
+        {(showTextForm || showImageForm) && (
+          <div className="modal-backdrop">
+            <div className="modal">
+              <input
+                type="text"
+                placeholder="Title"
+                value={newEventTitle}
+                onChange={(e) => setNewEventTitle(e.target.value)}
+              />
+              {showTextForm && (
+                <textarea
+                  placeholder="Text"
+                  value={newEventText}
+                  onChange={(e) => setNewEventText(e.target.value)}
+                  onInput={resizeTextarea}
+                  className="event-text-input"
+                />
+              )}
+              {showImageForm && (
+                <input type="file" onChange={handleImageUpload} />
+              )}
+              <div className="tags-input-container">
+                {newEventTags.map((tag, index) => (
+                  <span key={index} className="tag">
+                    {tag}
+                    <button
+                      onClick={() => removeTag(index)}
+                      className="tag-delete-btn"
+                    >
+                      x
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <input
+                type="text"
+                placeholder="Tags"
+                onKeyDown={handleTagInput}
+                className="tags-input"
+              />
+              <div className="submit-cancel-buttons">
+                <button
+                  className="submit-button"
+                  onClick={() => handleSubmit(showTextForm)}
+                >
+                  Submit
+                </button>
+                <button className="cancel-button" onClick={resetForm}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+	</div>
   );
 };
 

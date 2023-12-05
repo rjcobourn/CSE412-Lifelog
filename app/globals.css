@@ -14,7 +14,7 @@ body {
 }
 
 body {
-  background-color: #121212;
+  background-color: #1d1d1d;
 }
 
 .primary-color {
@@ -61,10 +61,38 @@ body {
   margin-top: 20px;
 }
 
+.fixed-header {
+  position: fixed;
+  flex-direction: column;
+  top: 8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  z-index: 1000;
+}
+  
+.lifelog {
+  font-family: 'Pacifico', cursive;
+  font-size: 64px;
+}
+  
+.search-input {	
+  margin: 2.5vh;
+  height: 2.5vh;
+  width: 30vw;
+  border-radius: 15px;
+  border: none;
+  text-indent: 10px;
+}
+
 .timeline {
   display: flex;
   align-items: center;
   padding: 20px;
+  padding-top: 30vh;
   height: 100%;
 }
 
@@ -72,12 +100,16 @@ body {
   color: white;
   width: 50vh;
   height: 50vh;
+  border-radius: 15px;
+  background-color: rgba(48, 48, 48, 0.817);
   margin: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ccc;
+  /* border: 2px outset #cccccc63; */
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.85);
 }
 
 .add-button {
@@ -249,13 +281,13 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  margin: 3px;
-  width: 20px;
-  height: 20px;
+  margin: 15px;
+  width: 30px;
+  height: 30px;
   font-size: 0.95em;
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background-color: rgb(204, 47, 47);
+  background-color: rgba(204, 47, 47, 0.681);
   transition: background-color 0.2s, transform 0.1s;
 }
