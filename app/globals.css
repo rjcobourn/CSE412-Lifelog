@@ -45,6 +45,7 @@ body {
   padding: 10px;
   border: none;
   background: #121212;
+  border-radius: 4px;
   color: #e0e0e0;
   box-sizing: border-box;
   margin: 10px 0;
@@ -57,8 +58,13 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #2d77ed;
+  background-color: rgba(115, 183, 255, 0.5);
   margin-top: 20px;
+}
+
+.login-page-buttons:hover {
+  background-color: #8ac3ff92;
+  transform: scale(1.02);
 }
 
 .fixed-header {
@@ -73,13 +79,13 @@ body {
   padding: 10px;
   z-index: 1000;
 }
-  
+
 .lifelog {
-  font-family: 'Pacifico', cursive;
+  font-family: "Pacifico", cursive;
   font-size: 64px;
 }
-  
-.search-input {	
+
+.search-input {
   margin: 2.5vh;
   height: 2.5vh;
   width: 30vw;
