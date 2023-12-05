@@ -190,7 +190,7 @@ body {
   margin-bottom: 5px;
   font-size: 14px;
 }
-  
+
 .tag-delete-btn {
   background-color: transparent;
   border: none;
@@ -198,7 +198,7 @@ body {
   cursor: pointer;
   margin-left: 5px;
 }
-  
+
 .tags-input {
   border: none;
   outline: none;
@@ -215,33 +215,48 @@ body {
 }
 
 .submit-button {
-	padding: 10px 20px;
-	margin: 5px;
-	font-size: .95em;
-	cursor: pointer;
-	border: none;
-	border-radius: 5px;
-	background-color: rgba(115, 183, 255, 0.5);
-	transition: background-color 0.2s, transform 0.1s;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 0.95em;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(115, 183, 255, 0.5);
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .cancel-button {
-	padding: 10px 20px;
-	margin: 5px;
-	font-size: .95em;
-	cursor: pointer;
-	border: none;
-	border-radius: 5px;
-	background-color: rgba(193, 223, 255, 0.394);
-	transition: background-color 0.2s, transform 0.1s;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 0.95em;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(193, 223, 255, 0.394);
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .submit-button:hover {
-	background-color: #8ac3ff92;
-	transform: scale(1.02);
+  background-color: #8ac3ff92;
+  transform: scale(1.02);
 }
 
 .cancel-button:hover {
-	background-color: #8ac3ff92;
-	transform: scale(1.02);
+  background-color: #8ac3ff92;
+  transform: scale(1.02);
+}
+
+.delete-content-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  font-size: 0.95em;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(204, 47, 47);
+  transition: background-color 0.2s, transform 0.1s;
 }

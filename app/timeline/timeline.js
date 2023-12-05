@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiFileText, FiImage } from "react-icons/fi";
+import { FaTrash } from "react-icons/fa";
 
 const Timeline = () => {
   const [events, setEvents] = useState([]);
@@ -208,6 +209,30 @@ const Timeline = () => {
     resetForm();
   };
 
+  const handleDelete = async (contentid) => {
+    try {
+      await fetch("/api/delete-content", {
+        method: "POST",
+        body: JSON.stringify({
+          contentid: contentid,
+        }),
+      })
+        .then((response) => {
+          // Check if the request was successful
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          setEvents(events.filter((event) => event.contentid !== contentid));
+        });
+    } catch (error) {
+      console.error("Error during deletion:", error);
+    }
+  };
+
   const resetForm = () => {
     setNewEventTitle("");
     setNewEventText("");
@@ -218,19 +243,25 @@ const Timeline = () => {
   };
 
   const handleLogout = () => {
-    document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    window.location.href = '/login';
+    console.log("Logging out...");
+    fetch("/api/logout", {
+      method: "POST",
+    }).then((response) => {
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      window.location.href = "/";
+      return response.json();
+    });
   };
 
   const timelineWidth = `calc(${(events.length + 1) * 50}vh + 32px)`;
 
   return (
-    <div
-      className="timeline"
-      style={{ width: timelineWidth, position: "relative" }}
-    >
+    <div className="timeline" style={{ width: timelineWidth }}>
       {/* Move the search input to the top left */}
-      <div style={{ position: "absolute", top: 0, left: 0, padding: "10px" }}>
+      <div style={{ position: "fixed", top: 0, left: 0, padding: "10px" }}>
         <input
           type="text"
           placeholder="Search events..."
@@ -238,7 +269,17 @@ const Timeline = () => {
           onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
         />
       </div>
-      <button onClick={handleLogout} style={{ position: 'absolute', top: 0, right: 0, padding: '10px' }}>
+      <button
+        onClick={handleLogout}
+        style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          padding: "10px",
+          margin: "10px",
+          cursor: "pointer",
+        }}
+      >
         Logout
       </button>
       {filteredEvents.map((event) => (
@@ -247,8 +288,26 @@ const Timeline = () => {
           ref={(el) => (eventRefs.current[event.contentid] = el)}
           className="timeline-item"
         >
-          <div style={{ height: "10%", display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              height: "10%",
+              width: "100%",
+              textAlign: "center",
+              position: "relative",
+            }}
+          >
             <h3 style={{ padding: 0, margin: 0 }}>{event.title}</h3>
+            <button
+              className="delete-content-btn"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onClick={() => handleDelete(event.contentid)}
+            >
+              <FaTrash size={15} />
+            </button>
           </div>
           {event.contenttype === "Entry" && (
             <p style={{ height: "90%" }}>{event.entrytext}</p>
